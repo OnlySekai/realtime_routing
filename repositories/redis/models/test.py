@@ -1,9 +1,9 @@
 import redis
-from redis_om import get_redis_connection, Field, P
+from redis_om import get_redis_connection, Field
 from redis_om import JsonModel
 
 class UserTest(JsonModel):
-    user_id: str = Field(primary_key=True)
+    user_id: str = Field(index=True)
     name: str
     age: int
 
