@@ -13,9 +13,3 @@ class EventBus:
         """ Gửi dữ liệu đến tất cả các listeners """
         for listener in self.listeners:
             listener(data)
-
-    def checkpoint(self):
-        """ Tạo một event bus mới và chuyển dữ liệu sang đó """
-        new_bus = EventBus()
-        self.bind(new_bus.emit)
-        return new_bus
