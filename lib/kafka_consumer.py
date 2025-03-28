@@ -1,16 +1,15 @@
-class State(State):
-    def __init__(self):
+from lib.state import State
+from repositories.kafka.connection import KafkaConfluentConsumerUtiles
+
+
+class KafkaSink(State):
+    def __init__(self, config):
         super().__init__()
-        self.kafka_consumer = KafkaConsumer(
-            bootstrap_servers=KAFKA_SERVER,
-            group_id=KAFKA_GROUP_ID,
-            auto_offset_reset='earliest',
-            enable_auto_commit=True,
-            value_deserializer=lambda x: json.loads(x.decode('utf-8'))
-        )
-        self.kafka_consumer.subscribe([KAFKA_TOPIC])
+        self.consumer_evt = KafkaConfluentConsumerUtiles(config)
+        self.consumer = self.consumer_evt.consumer
 
     def run(self):
-        super().run()
-        for message in self.kafka_consumer:
-            self.emit('message', message.value)
+        print("Consumer Event Tracking started!")
+        while True:
+            message = self.consumer.poll(1)
+            self.emit(message)

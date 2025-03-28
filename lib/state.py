@@ -2,9 +2,9 @@ from lib.event_bus import EventBus
 
 
 class State(EventBus):
-    def __init__(self, parent: State = None):
+    def __init__(self, parent: 'State' = None):
         self.parent = parent
-        running = False
+        self.running = False
         super().__init__()
 
     def bind(self, *handlers):
@@ -22,9 +22,12 @@ class State(EventBus):
             return rs
         return wrapper
     
+    def getRoot(self):
+        if (self.parent is None):
+            return self
+        return self.parent.getRoot()
+    
     def run(self):
         if (self.running):
             return
-        if (self.parent is not None):
-            self.parent.run()
-        self.running = True
+        self.getRoot().run()
