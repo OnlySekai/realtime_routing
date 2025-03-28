@@ -1,5 +1,5 @@
 import threading
-from lib.state import State
+from lib.state.state import State
 from repositories.kafka.connection import KafkaConfluentConsumerUtiles
 
 
