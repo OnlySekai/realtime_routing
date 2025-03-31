@@ -11,13 +11,14 @@ class KafkaSink(State):
         self.consumer_evt = KafkaConfluentConsumerUtiles(topic, config, num_partitions)
         self.consumer = self.consumer_evt.consumer
         self.lock = threading.Lock()
+        self.config = config
 
     def run(self):
         self.lock.acquire()
         if self.running:
             self.lock.release()
             return
-        print("Consumer Event Tracking started!")
+        print(f"Consumer Event Tracking started for group ID: {self.config.get('group.id')}")
         self.running = True
         self.lock.release()
         while True:
@@ -34,5 +35,9 @@ class KafkaSink(State):
                     raise KafkaException(message.error())
             else:
                 event = message.value().decode("utf-8")
-                event = json.loads(event)
+                try:
+                    event = json.loads(event)
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding JSON: {e}")
+                    continue
                 self.emit(event)

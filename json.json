@@ -1,0 +1,10 @@
+{
+    "transactionId": "/sub/sub-mngt/private/api/v1/sub/transaction/update",
+    "applicationCode": "sub-mngt",
+    "account": "1234567890",
+    "eventTime": "1743415415146",
+    "requestContent": {
+        "subCode": "VTM2",
+        "key2": "value2"
+    }
+}

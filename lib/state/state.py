@@ -26,8 +26,12 @@ class State:
         def wrapper(data):
             rs = data
             for h in handlers:
-                rs = h(rs)
-                if rs is None:
+                try:
+                    rs = h(rs)
+                    if rs is None:
+                        return None
+                except Exception as e:
+                    print(f"Error in handler {h}: {e}")
                     return None
             return rs
 

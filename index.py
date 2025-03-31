@@ -1,6 +1,6 @@
 import threading
 
-from segment.campain_push import (
+from segment.campain_push.dag.log_central import (
     campain_seg2356_flow,
     campain_seg1_flow,
     campain_seg4_flow,

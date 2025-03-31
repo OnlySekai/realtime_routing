@@ -1,7 +1,7 @@
-import datetime
+import datetime as dt
 from segment.campain_push.helper import *
 from segment.campain_push.constants import *
-
+datetime = dt.datetime
 def filter_event(event):
     return event.get("transactionId") == LOG_CENTRAL_TRANSACTION_ID and event.get("applicationCode") == LOG_CENTRAL_APPLICATION_CODE
 
@@ -20,36 +20,41 @@ def project_request_content(event):
     is_renew = event.get('request_content').get('isRenew', None)
     subs_code = event.get('request_content').get('subCode', None)
     if subs_code in PLUS_SUB_CODE:
-        subs_package = 'PLUS'
+        event['subs_package'] = 'PLUS'
     if subs_code in PREMIUM_SUB_CODE:
-        subs_package = 'PREMIUM'
+        event['subs_package'] = 'PREMIUM'
+    if (event.get('subs_package') is None):
+        return
     action = 'GIA_HAN' if is_renew else 'MUA_MOI'
     del event['request_content']
-    event['subs_package'] = subs_package
     event['action'] = action
     return event
 
 def join_sub_info(event):
-    subs_info = get_subs_info(event.msisdn)
+    msisdn = event['msisdn']
+    subs_info = get_subs_info(msisdn)
+    if (subs_info is None):
+        return event
     subs_info = {
-        'push_times': subs_info.get("pushTimes", None),
-        'start_subs': subs_info.get("startSubs", None)
+        'push_times': subs_info.get("pushTimes", 0),
+        'start_subs': subs_info.get("startSubs", None),
+        'last_push_segment': subs_info.get("lastPushSegment", None)
     }
     event['subs_info'] = subs_info
     return event
 
 
-have_sub_info = lambda event: bool(event['subs_info'])
+have_sub_info = lambda event: bool(event.get('subs_info', None))
 
 contidion_sub_times = lambda event: event['subs_info']['push_times'] < 3
 
 
-condition_first_time = lambda event: datetime.now() - datetime.strptime(event['event_time'], "%Y-%m-%d %H:%M:%S") <= datetime.timedelta(days=100)
+condition_first_time = lambda event: datetime.now() - datetime.strptime(event['event_time'], "%Y-%m-%d %H:%M:%S") <= dt.timedelta(days=100)
 
 flow_4_condition = (
     lambda event: event['subs_info']["start_subs"] == "PLUS"
-    and event['request_content']['sub_code'] in PREMIUM_SUB_CODE
-    and event['action'] == "MUA_MOI"
+    and event.get("subs_package", None) == "PREMIUM"
+    and event.get("action", None) == "MUA_MOI"
     and event['subs_info']['push_times'] == 0
 )
 # check mua goi pre
@@ -63,7 +68,7 @@ def set_segment(segment):
     return add_segment
 
 def set_segment_by_lastest(event):
-    last_push_segment = event.get('last_push_segment')
+    last_push_segment = event.get('subs_info').get('last_push_segment')
     if last_push_segment not in SEGMENTS.values():
         return None
     for key, value in SEGMENTS.items():
