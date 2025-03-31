@@ -13,6 +13,12 @@ def insert_user(msisdn, subs_package):
 def get_subs_info(msisdn):
     return redis_client.json().get("SubsInfo:" + msisdn)
 
+def insert_push_log(msisdn, event_time, segment):
+    key_today = "SubsCampaignPush:" + datetime.now().strftime('%Y-%m-%d')
+    if redis_client.exists(key_today):
+        redis_client.json().merge(key_today, '$.' + msisdn, {segment: event_time})
+    else:
+        redis_client.json().set(key_today, '$', {msisdn: {segment: event_time}})
 
 def pushCEP(msisdn, segment, trigger_time=None):
     event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -32,4 +38,18 @@ def pushCEP(msisdn, segment, trigger_time=None):
     print(
         f"Pushed CEP for {msisdn} with segment {segment} | {event_time} | {trigger_time}"
     )
-    redis_client.insert_push_log(msisdn, event_time, segment)
+    insert_push_log(msisdn, event_time, segment)
+
+def set_first_subs_time(msisdn, event_time):
+    if not redis_client.exists("SubsInfo:" + msisdn):
+        redis_client.json().set("SubsInfo:" + msisdn, '$', {'firsSubsTime': event_time})
+    else:
+        redis_client.json().set("SubsInfo:" + msisdn, '.firsSubsTime', event_time)
+
+def update_subs_info(msisdn, lastPushSegment, activeSubs):
+    pipe = redis_client.pipeline()
+    pipe.json().set("SubsInfo:" + msisdn, '.lastPushSegment', lastPushSegment)
+    pipe.json().set("SubsInfo:" + msisdn, '.activeSubs', activeSubs)
+    pipe.json().numincrby("SubsInfo:" + msisdn, '.pushTimes', 1)
+    pipe.execute()
+
