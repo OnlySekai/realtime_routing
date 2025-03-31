@@ -5,7 +5,13 @@ from lib.state.state import State
 
 
 class SampleSink(State):
-    def __init__(self, name:str = None, des: str = None, log: bool = False, parent: 'State' = None):
+    def __init__(
+        self,
+        name: str = None,
+        des: str = None,
+        log: bool = False,
+        parent: "State" = None,
+    ):
         super().__init__(parent=parent, name=name, des=des, log=log)
         self.lock = threading.Lock()
 
@@ -18,5 +24,5 @@ class SampleSink(State):
         self.running = True
         self.lock.release()
         while True:
-           sleep(2)
-           self.emit(random.randint(0, 100))
+            sleep(2)
+            self.emit(random.randint(0, 100))
