@@ -9,7 +9,9 @@ CAMPAIGN_KAFKA_TOPIC = config("CAMPAIGN_KAFKA_TOPIC", default=None)
 
 # Kafka 137
 BOOTSTRAP_SERVERS_137 = config("BOOTSTRAP_SERVERS_137", default=None)
-KAFKA_137_KERBEROS_SERVICE_NAME = config("KAFKA_137_KERBEROS_SERVICE_NAME", default=None)
+KAFKA_137_KERBEROS_SERVICE_NAME = config(
+    "KAFKA_137_KERBEROS_SERVICE_NAME", default=None
+)
 KEYTAB_137 = config("KEYTAB_137", default=None)
 PRINCIPAL_137 = config("PRINCIPAL_137", default=None)
 # KAFKA_137_BASED_CONSUMER_CONFIGS = {
@@ -24,7 +26,7 @@ PRINCIPAL_137 = config("PRINCIPAL_137", default=None)
 KAFKA_137_BASED_CONSUMER_CONFIGS = {
     "bootstrap.servers": BOOTSTRAP_SERVERS_137,
     "auto.offset.reset": "earliest",
-    "group.id": 'KAFKA_137_BASED_CONSUMER_CONFIGS',
+    "group.id": "KAFKA_137_BASED_CONSUMER_CONFIGS",
 }
 
 # Kafka logCentral

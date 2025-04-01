@@ -18,7 +18,9 @@ class KafkaSink(State):
         if self.running:
             self.lock.release()
             return
-        print(f"Consumer Event Tracking started for group ID: {self.config.get('group.id')}")
+        print(
+            f"Consumer Event Tracking started for group ID: {self.config.get('group.id')}"
+        )
         self.running = True
         self.lock.release()
         while True:

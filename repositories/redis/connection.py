@@ -1,6 +1,7 @@
 from config import REDIS_HOST, REDIS_PORT, REDIS_DB
 import redis
 
+
 class RedisConnectionRepository:
     """
     Repository for managing Redis connections.
@@ -21,7 +22,7 @@ class RedisConnectionRepository:
                 host=self.host,
                 port=self.port,
                 db=self.db,
-                decode_responses=True  # Ensures responses are returned as strings
+                decode_responses=True,  # Ensures responses are returned as strings
             )
             # Test the connection
             self.connection.ping()
@@ -29,6 +30,24 @@ class RedisConnectionRepository:
         except redis.ConnectionError as e:
             print(f"Failed to connect to Redis: {e}")
             self.connection = None
+
+    def pipe_set(self, pipe, key, updates):
+        pipe.json().set(key, "$", {}, True)
+        for update in updates:
+            path = update["path"]
+            value = update["value"]
+            nx = update.get("nx", False)
+            xx = update.get("xx", False)
+            pipe.json().set(key, path, value, nx=nx, xx=xx)
+        return pipe
+
+    def pipe_inc(self, pipe, key, updates):
+        pipe.json().set(key, "$", {}, True)
+        for update in updates:
+            path = update["path"]
+            value = update["value"]
+            pipe.json().numincrby(key, path, value)
+        return pipe
 
     def get_connection(self):
         """

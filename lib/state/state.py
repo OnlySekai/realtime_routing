@@ -52,7 +52,9 @@ class State:
         if chained_handler is None:
             return
         for listener in self.join_point:
-            threading.Thread(target=listener, args=[copy.deepcopy(chained_handler)]).start()
+            threading.Thread(
+                target=listener, args=[copy.deepcopy(chained_handler)]
+            ).start()
 
     def fork(self, name: str = None, des: str = None, log: bool = False):
         """Tạo một event bus mới và chuyển dữ liệu sang đó"""
