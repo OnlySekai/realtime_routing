@@ -55,24 +55,32 @@ def join_sub_info(event):
     return event
 
 
-have_sub_info = lambda event: bool(event.get("subs_info", None))
+def have_sub_info(event):
+    return bool(event.get("subs_info", None))
 
-contidion_sub_times = lambda event: event["subs_info"]["push_times"] < 3
+
+def contidion_sub_times(event):
+    return event["subs_info"]["push_times"] < 3
 
 
-condition_first_time = lambda event: datetime.now() - datetime.strptime(
-    event["event_time"], "%Y-%m-%d %H:%M:%S"
-) <= dt.timedelta(days=100)
+def condition_first_time(event):
+    return datetime.now() - datetime.strptime(
+        event["event_time"], "%Y-%m-%d %H:%M:%S"
+    ) <= dt.timedelta(days=100)
 
-flow_4_condition = (
-    lambda event: event["subs_info"]["start_subs"] == "PLUS"
-    and event.get("subs_package", None) == "PREMIUM"
-    and event.get("action", None) == "MUA_MOI"
-    and event["subs_info"]["push_times"] == 0
-)
+
+def flow_4_condition(event):
+    return (
+        event["subs_info"]["start_subs"] == "PLUS"
+        and event.get("subs_package", None) == "PREMIUM"
+        and event.get("action", None) == "MUA_MOI"
+        and event["subs_info"]["push_times"] == 0
+    )
 # check mua goi pre
 
-flow_2356_condition = lambda event: event["subs_info"]["push_times"] > 0
+
+def flow_2356_condition(event):
+    return event["subs_info"]["push_times"] > 0
 
 
 def set_segment(segment):

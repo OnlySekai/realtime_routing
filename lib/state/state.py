@@ -1,7 +1,8 @@
 import threading
 import copy
 
-list_state = []
+from config import FOR_DRAW
+
 
 
 class State:
@@ -10,7 +11,7 @@ class State:
         parent: "State" = None,
         name: str = None,
         des: str = None,
-        log: bool = False,
+        log: bool = False
     ):
         self.parent = parent
         self.running = False
@@ -19,8 +20,11 @@ class State:
         self.des = des
         self.name = name
         self.log = log
+        self.list_state = []
+        self.for_draw = FOR_DRAW
         super().__init__()
-        list_state.append(self)
+
+
 
     def chain_handler(self, handlers):
         def wrapper(data):
@@ -59,6 +63,9 @@ class State:
     def fork(self, name: str = None, des: str = None, log: bool = False):
         """Tạo một event bus mới và chuyển dữ liệu sang đó"""
         new_bus = State(parent=self, name=name, des=des, log=log)
+        if self.for_draw:
+            root = self.getRoot()
+            root.list_state.append(new_bus)
         self.join_point.append(new_bus.emit)
         return new_bus
 
