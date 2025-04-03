@@ -1,8 +1,10 @@
 """
 This module provides utility functions for drawing DAG images and creating join points in a state machine.
 """
+
 from lib.state.state import State
 import graphviz
+
 
 def draw_dag_image(dag_base, segmentName="dag"):
     """
@@ -15,7 +17,7 @@ def draw_dag_image(dag_base, segmentName="dag"):
     dag = dag_base.getRoot()
     filename = f"segment/{segmentName}/diagram/{dag_base.name if dag_base.name != None else 'dag'}"
 
-    dot = graphviz.Digraph(comment='DAG', format='png')
+    dot = graphviz.Digraph(comment="DAG", format="png")
     visited_states = set()  # Set to track visited states
 
     def add_nodes_edges(state, dot):
@@ -24,14 +26,26 @@ def draw_dag_image(dag_base, segmentName="dag"):
         visited_states.add(state)  # Mark state as visited
 
         node_name = f"{id(state)}"
-        dot.node(node_name, f"{state.name or 'State'}\\n{state.des or ''}", shape='box', style='filled', fillcolor='green')
+        dot.node(
+            node_name,
+            f"{state.name or 'State'}\\n{state.des or ''}",
+            shape="box",
+            style="filled",
+            fillcolor="green",
+        )
 
         # Add edges for bind operations
         for i, listener in enumerate(state.listeners):
             op_node_name = f"{id(state)}-op-{i}"
-            op_name = getattr(listener, '__name__', 'Operator')
-            node_color = 'lightcoral' if "filter" in op_name.lower() else 'white'
-            dot.node(op_node_name, f"{op_name}", style='filled', fillcolor=node_color, fontcolor='black')
+            op_name = getattr(listener, "__name__", "Operator")
+            node_color = "lightcoral" if "filter" in op_name.lower() else "white"
+            dot.node(
+                op_node_name,
+                f"{op_name}",
+                style="filled",
+                fillcolor=node_color,
+                fontcolor="black",
+            )
             dot.edge(node_name, op_node_name)
             node_name = op_node_name
 
@@ -46,7 +60,7 @@ def draw_dag_image(dag_base, segmentName="dag"):
     dot.render(filename, view=False)
 
 
-def JoinPoint(name, des,*states) -> State:
+def JoinPoint(name, des, *states) -> State:
     """
     Creates a join point in the state machine.
 

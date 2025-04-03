@@ -76,6 +76,8 @@ def flow_4_condition(event):
         and event.get("action", None) == "MUA_MOI"
         and event["subs_info"]["push_times"] == 0
     )
+
+
 # check mua goi pre
 
 
@@ -85,10 +87,13 @@ def flow_2356_condition(event):
 
 def set_segment(segment):
     def add_segment(event):
-        event["segment"] = segment \
-            if not isinstance(segment, dict) \
+        event["segment"] = (
+            segment
+            if not isinstance(segment, dict)
             else segment.get(event.get("subs_package"))
+        )
         return event
+
     return add_segment
 
 
@@ -103,7 +108,7 @@ def set_segment_by_lastest(event):
         elif value == last_push_segment:
             segment = SEGMENTS[int(key) + 1]
             break
-    if (segment is None):
+    if segment is None:
         return None
     return set_segment(segment)(event)
 

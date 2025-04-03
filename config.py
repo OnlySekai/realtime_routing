@@ -1,4 +1,5 @@
 from decouple import config
+
 FOR_DRAW = config("FOR_DRAW", default="0", cast=bool)
 KAFKA_BOOTSTRAP_SERVERS = config("KAFKA_BOOTSTRAP_SERVERS", default=None)
 REDIS_HOST = config("REDIS_HOST", default=None)

@@ -4,14 +4,13 @@ import copy
 from config import FOR_DRAW
 
 
-
 class State:
     def __init__(
         self,
         parent: "State" = None,
         name: str = None,
         des: str = None,
-        log: bool = False
+        log: bool = False,
     ):
         self.parent = parent
         self.running = False
@@ -23,8 +22,6 @@ class State:
         self.list_state = []
         self.for_draw = FOR_DRAW
         super().__init__()
-
-
 
     def chain_handler(self, handlers):
         def wrapper(data):
