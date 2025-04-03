@@ -5,7 +5,7 @@ from segment.marketing_sub.operator import *
 
 Data = FilterState(consumer_logCentral
     .fork("Data")
-    .bind(projected_data_trans)
+    .bind(project_topup_data)
     .bind(wrap_filter(is_data))
 )
 
@@ -23,7 +23,7 @@ DataPre = ( Data
 
 Topup = FilterState(consumer_logCentral
     .fork("Topup")
-    .bind(projected_topup_trans)
+    .bind(project_topup_data)
     .bind(wrap_filter(is_top_up))
 )
 
