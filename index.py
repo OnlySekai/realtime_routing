@@ -1,16 +1,12 @@
 import threading
 
-from segment.campain_push.dag.log_central import (
-    campain_seg2356_flow,
-    campain_seg1_flow,
-    campain_seg4_flow,
+from segment.marketing_sub.dag.main import (
+ main
 )
 
 # Define a list of flows
 flows = [
-    campain_seg2356_flow.run,
-    campain_seg1_flow.run,
-    campain_seg4_flow.run,
+    main.run
 ]
 
 # Create and start threads for each flow

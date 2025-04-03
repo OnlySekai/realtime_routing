@@ -6,22 +6,12 @@ from segment.marketing_sub.dag.core_payment import (
 )
 from lib.utils import JoinPoint
 from lib.operator.simple import wrap_filter
-from segment.marketing_sub.dag.trans_his import (
-    PlusGreater,
-    PlusLess,
-    PreGreater,
-    PreLess,
-)
 from segment.marketing_sub.operator import *
 
 main = (
     JoinPoint(
         "Prepare Push",
         "",
-        PreLess,
-        PreGreater,
-        PlusLess,
-        PlusGreater,
         TopupPlus,
         TopupPre,
         DataPre,
