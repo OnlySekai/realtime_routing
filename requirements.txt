@@ -1,3 +1,4 @@
 confluent-kafka==2.9.0
-redis==5.2.1
+graphviz==0.20.3
 python-decouple==3.8
+redis==5.2.1

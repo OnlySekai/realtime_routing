@@ -1,7 +1,17 @@
+"""
+This module provides utility functions for drawing DAG images and creating join points in a state machine.
+"""
 from lib.state.state import State
 import graphviz
 
 def draw_dag_image(dag_base, segmentName="dag"):
+    """
+    Draws a directed acyclic graph (DAG) image using graphviz.
+
+    Args:
+        dag_base: The base DAG object.
+        segmentName: The name of the segment.
+    """
     dag = dag_base.getRoot()
     filename = f"segment/{segmentName}/diagram/{dag_base.name if dag_base.name != None else 'dag'}"
 
@@ -37,6 +47,17 @@ def draw_dag_image(dag_base, segmentName="dag"):
 
 
 def JoinPoint(name, des,*states) -> State:
+    """
+    Creates a join point in the state machine.
+
+    Args:
+        name: The name of the join point.
+        des: The description of the join point.
+        *states: The states to join.
+
+    Returns:
+        The combined state.
+    """
     roots = {x.getRoot() for x in states}
     combined_state = State(states[0], name, des)
     for root in roots:
