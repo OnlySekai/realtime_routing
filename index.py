@@ -4,9 +4,13 @@ from segment.marketing_sub.dag.main import (
  main
 )
 
+from segment.marketing_sub.dag.hdfs import *
+
 # Define a list of flows
 flows = [
-    main.run
+    main.run,
+    predict_flow.run,
+    active_flow.run
 ]
 
 # Create and start threads for each flow

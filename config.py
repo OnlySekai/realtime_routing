@@ -50,3 +50,10 @@ LOG_CENTRAL_KAFKA_CONSUMER_CONFIGS = {
     "group.id": LOG_CENTRAL_KAFKA_GROUP_ID,
     "auto.offset.reset": "earliest",
 }
+
+HISTORY_SERVICE_INSERT_HBASE_OBJECT_TOPIC=config("HISTORY_SERVICE_INSERT_HBASE_OBJECT_TOPIC", None)
+HISTORY_SERVICE_INSERT_HBASE_OBJECT_KAFKA_CONSUMER_CONFIGS= {
+    "bootstrap.servers": config("TMS_KAFKA_BOOTSTRAP_SERVERS", None),
+    "group.id": config("HISTORY_SERVICE_INSERT_HBASE_OBJECT_GROUP_ID", None),
+    "auto.offset.reset": "earliest",
+}

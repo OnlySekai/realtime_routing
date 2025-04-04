@@ -1,0 +1,12 @@
+{
+    "eventName": "CORE_PAYMENT_OTP_TRANS_HIS",
+    "originalRequestId": "OTP250324720223781",
+    "transDate": "2025-03-24T08:56:07.001Z",
+    "identifyValue": "84977465919",
+    "logTransaction": true,
+    "tableName": "customer_history",
+    "serviceName": "Nạp tiền điện thoại",
+    "serviceCode": "000000",
+    "paymentId": "01JQ2XTGPSYXH11EKFA6HAPXZ9",
+    "paymentDetails": []
+}
